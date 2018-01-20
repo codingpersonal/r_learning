@@ -1,5 +1,6 @@
 data("faithful")
 
+
 #setwd("/Users/saurabg/saurabg/practice codes/r_learning/")
 #getwd()
 
