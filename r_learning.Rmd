@@ -15,7 +15,7 @@ This is an R Markdown document. Markdown is a simple formatting syntax for autho
 
 When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
 
-```{r cars}
+```{r}
 setwd("/Users/saurabg/saurabg/practice codes/r_learning/")
 getwd()
 
@@ -34,8 +34,135 @@ qplot(data=reddit, x = age.range_factor)
 
 You can also embed plots, for example:
 
-```{r pressure, echo=FALSE}
-plot(pressure)
+```{r cars}
+plot(mtcars$hp, mtcars$mpg, pch = mtcars$am, cex = 1.2)
+     legend("topright", c("automatic, manual"), pch=c(0,1))
 ```
 
 Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+
+```{r}
+x = 1:100
+y = x*x
+plot(x, y)
+library(ggplot2)
+qplot(x=x, y=y, main = "sq function", geom = "point")
+
+data("faithful")
+head(faithful)
+plot(faithful$waiting, faithful$eruptions, pch = 18, col = 2, cex = 1.2)
+
+qplot(x = waiting, data = faithful, binwidth= 3, main = "waiting time")
+ggplot(faithful, aes(x=waiting, y = ..density..)) + geom_histogram(binwidth = 3, alpha = 0.7) +
+  geom_density(size = 1.5, color = "red")
+```
+
+
+```{r cars}
+x = seq(-2, 2, length.out = 30)
+y = x^2
+qplot(x, y, geom = c("line", "point"))
+
+data = data.frame(x = x, y = y)
+ggplot(data = data, aes(x = x, y = y)) + geom_line() + geom_point()
+
+data("mtcars")
+names(mtcars)
+
+mtcars$amf[mtcars$am == 0] = "automatic"
+mtcars$amf[mtcars$am == 1] = "manual"
+mtcars$amf[mtcars$am == 0] = "automatic"
+mtcars$amf[mtcars$am == 0] = "automatic"
+
+qplot(x=wt, y = mpg, data = mtcars, facets = vs~am)
+```
+
+```{r}
+
+x_grid = seq(-1, 1, length.out = 100)
+y_grid = x_grid
+R = expand.grid(x_grid, y_grid)
+names(R) = c("x", "y")
+R
+R$z = R$x^2 + R$y^2
+ggplot(R, aes(x = R$x, y = R$y, z = R$z)) + stat_contour()
+```
+
+
+``` {r}
+
+data("mpg")
+head(mpg)
+names(mpg)
+unique(mpg$manufacturer)
+
+ggplot(data = mpg, aes("", hwy)) + 
+  geom_boxplot(outlier.colour = "red", varwidth = TRUE, width = 0.2) +
+  coord_flip() + scale_y_continuous(name = "mileage on highways")
+
+```
+
+```{r}
+library(ggplot2)
+library(GGally)
+setwd("/Users/saurabg/saurabg/MS\ at\ GTech/gtech_submissions/spring2018/dva/Project\ 1")
+getwd()
+load('movies_merged')
+dim(movies_merged)
+
+df <- movies_merged
+names(df)
+
+qplot(x = Year, data=df) + geom_density()
+
+ggplot(data = df, aes(x = Year, y = ..density..))  + 
+  geom_histogram(alpha = 0.4) +
+  geom_density(size=2, color = "red")
+```
+
+```{r}
+#plotting a contour
+
+x = seq(-1, 1, length.out = 100)
+y = seq(-1, 1, length.out = 100)
+
+R <- expand.grid(x, y)
+R$z = R$Var1^2 + R$Var2^2
+ggplot(R, aes(x = R$Var1, y = R$Var2, z= R$z)) + geom_contour()
+```
+
+```{r}
+library(plyr)
+library(MASS)
+library("robustHD")
+library(reshape2)
+
+names(df)
+df2 <- df[1:100, c("Title", "imdbRating", "imdbVotes", "tomatoRating", "tomatoUserRating", "tomatoMeter", "tomatoUserMeter")]
+names(df2)
+
+#using reshape package
+df_m = melt(df2, id = "Title")
+df_m
+df_m[df_m$variable == "tomatoUserRating" & !is.na(df_m$value) & df_m$value > 2.0, ]
+dcast(df_m, Title~variable, fun.aggregate = length)
+
+
+#using tidyr package
+library(tidyr)
+df2 <- df[1:100, c("Title", "Genre", "imdbRating", "imdbVotes", "tomatoRating", "tomatoUserRating", "tomatoMeter", "tomatoUserMeter")]
+names(df2)
+
+df_g = gather(df2, "rating_type", "rating", names(df2)[3:8])
+df_g
+
+separate(df2, Genre, into = c("genre1", "genre2"), sep = "\\,")
+
+```
+
+```{r}
+
+
+
+```
+
